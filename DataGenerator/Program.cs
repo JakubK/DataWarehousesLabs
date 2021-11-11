@@ -46,8 +46,8 @@ namespace DataGenerator
             var testAgents = new Faker<Agent>()
                 .StrictMode(true)
                 .RuleFor(x => x.Id, f => agentIds++)
-                .RuleFor(x => x.Name, f => f.Name.FirstName())
-                .RuleFor(x => x.Surname, f => f.Name.LastName())
+                .RuleFor(x => x.FirstName, f => f.Name.FirstName())
+                .RuleFor(x => x.LastName, f => f.Name.LastName())
                 .RuleFor(x => x.DepartmentId, f => random.Next() % DepartmentCount);
             await Write("agents.csv", testAgents, AgentCount);
 

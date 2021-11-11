@@ -21,6 +21,8 @@ namespace DataGenerator
         public static int ProducerCount = 100;
         public static int ProductCount = 100;
 
+        public static int ExcelEntryCount = 100;
+
         static async Task Write<T>(string filename, Faker<T> faker, int count) where T : class
         {
             using (var writer = new StreamWriter(filename))
@@ -43,13 +45,20 @@ namespace DataGenerator
             await Write("departments.csv", testDepartments, DepartmentCount);
 
             var agentIds = 0;
+            var agents = new List<Agent>();
             var testAgents = new Faker<Agent>()
                 .StrictMode(true)
                 .RuleFor(x => x.Id, f => agentIds++)
                 .RuleFor(x => x.FirstName, f => f.Name.FirstName())
                 .RuleFor(x => x.LastName, f => f.Name.LastName())
                 .RuleFor(x => x.DepartmentId, f => random.Next() % DepartmentCount);
-            await Write("agents.csv", testAgents, AgentCount);
+            using (var writer = new StreamWriter("agents.csv"))
+            using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
+            {
+                agents = testAgents.Generate(AgentCount);
+                await csv.WriteRecordsAsync(agents);
+            }
+
 
             var testClients = new Faker<Client>()
                 .StrictMode(true)
@@ -84,6 +93,31 @@ namespace DataGenerator
                 .RuleFor(x => x.ProductId, f => random.Next() % ProductCount)
                 .RuleFor(x => x.ClientId, f => random.Next() % ClientCount);
             await Write("calls.csv", testProducts, ProductCount);
+
+
+            var tempAgentId = random.Next() % AgentCount;
+            var tempHourlyRate = random.Next() % 30;
+            var tempHourCount = random.Next() % 200;
+
+            var testExcelEntries = new Faker<ExcelEntry>()
+                .StrictMode(true)
+                .RuleFor(x => x.Year, f => random.Next() % 10 + 2000)
+                .RuleFor(x => x.Month,f => f.Date.Month())
+                .RuleFor(x => x.AgentId, f => random.Next() % AgentCount)
+                .RuleFor(x => x.FirstName, f => agents[tempAgentId].FirstName)
+                .RuleFor(x => x.LastName, f => agents[tempAgentId].LastName)
+                .RuleFor(x => x.DepartmentId, f => random.Next() % DepartmentCount)
+                .RuleFor(x => x.HourlyRate, f => tempHourlyRate)
+                .RuleFor(x => x.Bonus, f => random.Next() % 300)
+                .RuleFor(x => x.HourCount, f => tempHourCount)
+                .RuleFor(x => x.Salary, f => tempHourCount * tempHourlyRate)
+                .FinishWith((x,y) => {
+                    //generate next id
+                    tempAgentId = random.Next() % AgentCount;
+                    tempHourlyRate = random.Next() % 30;
+                    tempHourCount = random.Next() % 200;
+                });
+            await Write("excel.csv", testExcelEntries, ExcelEntryCount);
         }
     }
 }

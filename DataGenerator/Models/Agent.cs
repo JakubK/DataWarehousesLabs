@@ -1,6 +1,6 @@
 namespace DataGenerator.Models
 {
-    public class DataGenerator
+    public class Agent
     {
         public int Id { get; set; }
         public string Name { get; set; }

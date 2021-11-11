@@ -3,25 +3,37 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Threading.Tasks;
+
 using Bogus;
 using CsvHelper;
+
 using DataGenerator.Models;
 
 namespace DataGenerator
 {
     class Program
     {
-        public static int AgentCount = 100;
-        public static int ClientCount = 100;
+        // Upper data bounds
+        public const int TotalBonus = 300;
+        public const int TotalBoughtProductCount = 20;
+        public const int TotalMaxAgentCount = 10;
 
-        public static int DepartmentCount = 100;
+        public const int MaxHourlyRate = 30;
+        public const int MaxMonthHours = 200;
 
-        public static int PhoneCallCount = 100;
 
-        public static int ProducerCount = 100;
-        public static int ProductCount = 100;
+        // Data row count
+        public const int AgentCount = 100;
+        public const int ClientCount = 100;
 
-        public static int ExcelEntryCount = 100;
+        public const int DepartmentCount = 100;
+
+        public const int PhoneCallCount = 100;
+
+        public const int ProducerCount = 100;
+        public const int ProductCount = 100;
+
+        public const int ExcelEntryCount = 100;
 
         static async Task Write<T>(string filename, Faker<T> faker, int count) where T : class
         {
@@ -41,7 +53,7 @@ namespace DataGenerator
                 .RuleFor(x => x.Id, f => departmentIds++)
                 .RuleFor(x => x.Name, f => f.Commerce.Department())
                 .RuleFor(x => x.Location, f => f.Address.City())
-                .RuleFor(x => x.MaxAgentCount, f => random.Next() % 10);
+                .RuleFor(x => x.MaxAgentCount, f => random.Next() % TotalMaxAgentCount);
             await Write("departments.csv", testDepartments, DepartmentCount);
 
             var agentIds = 0;
@@ -59,11 +71,10 @@ namespace DataGenerator
                 await csv.WriteRecordsAsync(agents);
             }
 
-
             var testClients = new Faker<Client>()
                 .StrictMode(true)
                 .RuleFor(x => x.PhoneNumber, f => f.Person.Phone)
-                .RuleFor(x => x.BoughtProductCount, f => random.Next() % 20);
+                .RuleFor(x => x.BoughtProductCount, f => random.Next() % TotalBoughtProductCount);
             await Write("clients.csv", testClients, ClientCount);
 
             var producerIds = 0;
@@ -94,10 +105,9 @@ namespace DataGenerator
                 .RuleFor(x => x.ClientId, f => random.Next() % ClientCount);
             await Write("calls.csv", testProducts, ProductCount);
 
-
             var tempAgentId = random.Next() % AgentCount;
-            var tempHourlyRate = random.Next() % 30;
-            var tempHourCount = random.Next() % 200;
+            var tempHourlyRate = random.Next() % MaxHourlyRate;
+            var tempHourCount = random.Next() % MaxMonthHours;
 
             var testExcelEntries = new Faker<ExcelEntry>()
                 .StrictMode(true)
@@ -108,14 +118,14 @@ namespace DataGenerator
                 .RuleFor(x => x.LastName, f => agents[tempAgentId].LastName)
                 .RuleFor(x => x.DepartmentId, f => random.Next() % DepartmentCount)
                 .RuleFor(x => x.HourlyRate, f => tempHourlyRate)
-                .RuleFor(x => x.Bonus, f => random.Next() % 300)
+                .RuleFor(x => x.Bonus, f => random.Next() % TotalBonus)
                 .RuleFor(x => x.HourCount, f => tempHourCount)
                 .RuleFor(x => x.Salary, f => tempHourCount * tempHourlyRate)
                 .FinishWith((x,y) => {
-                    //generate next id
+                    //generate temp values for next round
                     tempAgentId = random.Next() % AgentCount;
-                    tempHourlyRate = random.Next() % 30;
-                    tempHourCount = random.Next() % 200;
+                    tempHourlyRate = random.Next() % MaxHourlyRate;
+                    tempHourCount = random.Next() % MaxMonthHours;
                 });
             await Write("excel.csv", testExcelEntries, ExcelEntryCount);
         }

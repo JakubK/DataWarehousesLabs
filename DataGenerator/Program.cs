@@ -14,6 +14,7 @@ namespace DataGenerator
     class Program
     {
         // Upper data bounds
+        public const double MaxMargin = 0.3;
         public const int TotalBonus = 300;
         public const int TotalBoughtProductCount = 20;
         public const int TotalMaxAgentCount = 10;
@@ -90,7 +91,7 @@ namespace DataGenerator
                 .RuleFor(x => x.Id, f => productIds++)
                 .RuleFor(x => x.Name, f => f.Commerce.ProductName())
                 .RuleFor(x => x.Price, f => decimal.Parse(f.Commerce.Price()))
-                .RuleFor(x => x.Margin, f => Math.Round(((decimal)random.NextDouble()),2))
+                .RuleFor(x => x.Margin, f => Math.Round(((decimal)(random.NextDouble() % MaxMargin)),2))
                 .RuleFor(x => x.ProducerId, f => random.Next() % ProducerCount);
             await Write("products.csv", testProducts, ProductCount);
 
@@ -98,12 +99,12 @@ namespace DataGenerator
             var testCalls = new Faker<PhoneCall>()
                 .StrictMode(true)
                 .RuleFor(x => x.Id, f => phoneCallIds++)
-                .RuleFor(x => x.Result, (random.Next() % 2) == 0 ? false : true)
+                .RuleFor(x => x.Result, f => (random.Next() % 2) == 0 ? false : true)
                 .RuleFor(x => x.CallDate, f => f.Date.Past())
                 .RuleFor(x => x.AgentId, f => random.Next() % AgentCount)
                 .RuleFor(x => x.ProductId, f => random.Next() % ProductCount)
                 .RuleFor(x => x.ClientId, f => random.Next() % ClientCount);
-            await Write("calls.csv", testProducts, ProductCount);
+            await Write("calls.csv", testCalls, PhoneCallCount);
 
             var tempAgentId = random.Next() % AgentCount;
             var tempHourlyRate = random.Next() % MaxHourlyRate;

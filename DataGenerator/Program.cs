@@ -36,6 +36,8 @@ namespace DataGenerator
         public const int ProductCount = 100;
         public const int ExcelEntryCount = 100;
 
+
+        // Generate data and write it to file
         static async Task<List<T>> Write<T>(string filename, Faker<T> faker, int count) where T : class
         {
             var data = faker.Generate(count);
@@ -46,6 +48,17 @@ namespace DataGenerator
             }
             return data;
         }
+
+        // Write generated data to file
+        static async Task WriteData<T>(string filename, List<T> data) where T : class
+        {
+            using (var writer = new StreamWriter(filename))
+            using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
+            {
+                await csv.WriteRecordsAsync(data);
+            }
+        }
+
         static async Task Main(string[] args)
         {
             var random = new Random();

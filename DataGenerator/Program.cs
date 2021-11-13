@@ -57,7 +57,7 @@ namespace DataGenerator
                 .RuleFor(x => x.Name, f => f.Commerce.Department())
                 .RuleFor(x => x.Location, f => f.Address.City())
                 .RuleFor(x => x.MaxAgentCount, f => random.Next() % TotalMaxAgentCount);
-            await Write("departments.csv", testDepartments, DepartmentCount);
+            await Write("t0_departments.csv", testDepartments, DepartmentCount);
 
             var agentIds = 0;
             var agents = new List<Agent>();
@@ -67,7 +67,7 @@ namespace DataGenerator
                 .RuleFor(x => x.FirstName, f => f.Name.FirstName())
                 .RuleFor(x => x.LastName, f => f.Name.LastName())
                 .RuleFor(x => x.DepartmentId, f => random.Next() % DepartmentCount);
-            using (var writer = new StreamWriter("agents.csv"))
+            using (var writer = new StreamWriter("t0_agents.csv"))
             using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
             {
                 agents = testAgents.Generate(AgentCount);
@@ -78,14 +78,14 @@ namespace DataGenerator
                 .StrictMode(true)
                 .RuleFor(x => x.PhoneNumber, f => f.Person.Phone)
                 .RuleFor(x => x.BoughtProductCount, f => random.Next() % TotalBoughtProductCount);
-            await Write("clients.csv", testClients, ClientCount);
+            await Write("t0_clients.csv", testClients, ClientCount);
 
             var producerIds = 0;
             var testProducers = new Faker<Producer>()
                 .StrictMode(true)
                 .RuleFor(x => x.Id, f => producerIds++)
                 .RuleFor(x => x.Name, f => f.Company.CompanyName());
-            await Write("producers.csv", testProducers, ProducerCount);
+            await Write("t0_producers.csv", testProducers, ProducerCount);
 
             var productIds = 0;
             var testProducts = new Faker<Product>()
@@ -95,7 +95,7 @@ namespace DataGenerator
                 .RuleFor(x => x.Price, f => decimal.Parse(f.Commerce.Price()))
                 .RuleFor(x => x.Margin, f => Math.Round(((decimal)(random.NextDouble() % MaxMargin)),2))
                 .RuleFor(x => x.ProducerId, f => random.Next() % ProducerCount);
-            await Write("products.csv", testProducts, ProductCount);
+            await Write("t0_products.csv", testProducts, ProductCount);
 
             var phoneCallIds = 0;
             var testCalls = new Faker<PhoneCall>()
@@ -106,7 +106,7 @@ namespace DataGenerator
                 .RuleFor(x => x.AgentId, f => random.Next() % AgentCount)
                 .RuleFor(x => x.ProductId, f => random.Next() % ProductCount)
                 .RuleFor(x => x.ClientId, f => random.Next() % ClientCount);
-            await Write("calls.csv", testCalls, PhoneCallCount);
+            await Write("t0_calls.csv", testCalls, PhoneCallCount);
 
             var tempAgentId = random.Next() % AgentCount;
             var tempHourlyRate = random.Next() % MaxHourlyRate;
@@ -130,7 +130,7 @@ namespace DataGenerator
                     tempHourlyRate = random.Next() % MaxHourlyRate;
                     tempHourCount = random.Next() % MaxMonthHours;
                 });
-            await Write("excel.csv", testExcelEntries, ExcelEntryCount);
+            await Write("t0_excel.csv", testExcelEntries, ExcelEntryCount);
         }
     }
 }

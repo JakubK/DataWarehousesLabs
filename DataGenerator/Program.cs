@@ -41,11 +41,7 @@ namespace DataGenerator
         static async Task<List<T>> Write<T>(string filename, Faker<T> faker, int count) where T : class
         {
             var data = faker.Generate(count);
-            using (var writer = new StreamWriter(filename))
-            using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
-            {
-                await csv.WriteRecordsAsync(data);
-            }
+            await WriteData(filename,data);
             return data;
         }
 

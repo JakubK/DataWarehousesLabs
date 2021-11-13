@@ -10,6 +10,6 @@ namespace DataGenerator.Models
 
         public int ProductId { get; set; }
         public int AgentId { get; set; }
-        public int ClientId { get; set; }
+        public string ClientId { get; set; }
     }
 }

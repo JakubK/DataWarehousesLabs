@@ -23,7 +23,8 @@ namespace DataGenerator
         public const int TotalBoughtProductCount = 20;
         public const int TotalMaxAgentCount = 10;
 
-        public const int MaxHourlyRate = 30;
+        public const int MinHourlyRate = 15;
+        public const int MaxHourlyRate = 40;
         public const int MaxMonthHours = 200;
 
 
@@ -47,6 +48,9 @@ namespace DataGenerator
         public const double PriceAndMarginChangeProb = 0.5;
         public const double MaxPriceAndMarginChange = 0.30; // percentage, e.g. 0.3 means that change in price is 30%, should be less than 1
         public const double ProductChangeProb = 0.05;
+
+        public const double SalaryRiseProb = 0.15;
+        public const double MaxSalaryRise = 0.25;
         // TODO consider removing producer from T1 if none of his products exist
 
         // Generate data and write it to file
@@ -132,8 +136,13 @@ namespace DataGenerator
                 .RuleFor(x => x.ClientId, RandomObjectFromList(clients, random).PhoneNumber);
             await Write("t0_calls.csv", testCalls, PhoneCallCount);
 
+            var wages = new Dictionary<int, decimal>();
+            foreach (Agent agent in agents)
+            {
+                wages.Add(agent.Id, (decimal)Math.Round(MinHourlyRate + (MaxHourlyRate - MinHourlyRate) * random.NextDouble(), 2));
+            }
+
             var randAgent = RandomObjectFromList(agents, random);
-            var tempHourlyRate = random.Next() % MaxHourlyRate;
             var tempHourCount = random.Next() % MaxMonthHours;
             var testExcelEntries = new Faker<ExcelEntry>()
                 .StrictMode(true)
@@ -143,15 +152,14 @@ namespace DataGenerator
                 .RuleFor(x => x.FirstName, f => randAgent.FirstName)
                 .RuleFor(x => x.LastName, f => randAgent.LastName)
                 .RuleFor(x => x.DepartmentId, f => randAgent.DepartmentId)
-                .RuleFor(x => x.HourlyRate, f => tempHourlyRate)
+                .RuleFor(x => x.HourlyRate, f => wages[randAgent.Id])
                 .RuleFor(x => x.Bonus, f => random.Next() % TotalBonus)
                 .RuleFor(x => x.HourCount, f => tempHourCount)
-                .RuleFor(x => x.Salary, f => tempHourCount * tempHourlyRate)
+                .RuleFor(x => x.Salary, f => tempHourCount * wages[randAgent.Id])
                 .FinishWith((x, y) =>
                 {
                     //  generate temp values for next round
                     randAgent = RandomObjectFromList(agents, random);
-                    tempHourlyRate = random.Next() % MaxHourlyRate;
                     tempHourCount = random.Next() % MaxMonthHours;
                 });
             var excelEntries = await Write("t0_excel.csv", testExcelEntries, ExcelEntryCount);
@@ -173,6 +181,7 @@ namespace DataGenerator
                 if (random.NextDouble() <= AgentLaidOffProb)
                 {
                     agents[i] = testAgents.Generate(1)[0];
+                    wages.Add(agents[i].Id, (decimal)Math.Round(MinHourlyRate + (MaxHourlyRate - MinHourlyRate) * random.NextDouble(), 2));
                 }
             }
             await WriteData("t1_agents.csv", agents);
@@ -220,8 +229,15 @@ namespace DataGenerator
                 .RuleFor(x => x.ClientId, f => RandomObjectFromList(clients, random).PhoneNumber);
             await Write("t1_calls.csv", testCalls, PhoneCallCount);
 
+            foreach (Agent a in agents)
+            {
+                if (SalaryRiseProb <= random.NextDouble())
+                {
+                    wages[a.Id] *= (decimal)(MaxSalaryRise * random.NextDouble());
+                }
+            }
+            
             randAgent = RandomObjectFromList(agents, random);
-            tempHourlyRate = random.Next() % MaxHourlyRate;
             tempHourCount = random.Next() % MaxMonthHours;
             testExcelEntries = new Faker<ExcelEntry>()
                 .StrictMode(true)
@@ -231,15 +247,14 @@ namespace DataGenerator
                 .RuleFor(x => x.FirstName, f => randAgent.FirstName)
                 .RuleFor(x => x.LastName, f => randAgent.LastName)
                 .RuleFor(x => x.DepartmentId, f => randAgent.DepartmentId)
-                .RuleFor(x => x.HourlyRate, f => tempHourlyRate)
+                .RuleFor(x => x.HourlyRate, f => wages[randAgent.Id])
                 .RuleFor(x => x.Bonus, f => random.Next() % TotalBonus)
                 .RuleFor(x => x.HourCount, f => tempHourCount)
-                .RuleFor(x => x.Salary, f => tempHourCount * tempHourlyRate)
+                .RuleFor(x => x.Salary, f => tempHourCount * wages[randAgent.Id])
                 .FinishWith((x, y) =>
                 {
                     //  generate temp values for next round
                     randAgent = RandomObjectFromList(agents, random);
-                    tempHourlyRate = random.Next() % MaxHourlyRate;
                     tempHourCount = random.Next() % MaxMonthHours;
                 });
             await Write("t1_excel.csv", testExcelEntries, ExcelEntryCount);

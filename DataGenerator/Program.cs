@@ -13,6 +13,10 @@ namespace DataGenerator
 {
     class Program
     {
+        // Time ranges
+        public static DateTime T0 = new DateTime(2012,1,1); //  before T0
+        public static DateTime T1 = new DateTime(2013,1,1); //  before T1
+
         // Upper data bounds
         public const double MaxMargin = 0.3;
         public const int TotalBonus = 300;
@@ -26,14 +30,10 @@ namespace DataGenerator
         // Data row count
         public const int AgentCount = 100;
         public const int ClientCount = 100;
-
         public const int DepartmentCount = 100;
-
         public const int PhoneCallCount = 100;
-
         public const int ProducerCount = 100;
         public const int ProductCount = 100;
-
         public const int ExcelEntryCount = 100;
 
         static async Task Write<T>(string filename, Faker<T> faker, int count) where T : class
@@ -100,7 +100,7 @@ namespace DataGenerator
                 .StrictMode(true)
                 .RuleFor(x => x.Id, f => phoneCallIds++)
                 .RuleFor(x => x.Result, f => (random.Next() % 2) == 0 ? false : true)
-                .RuleFor(x => x.CallDate, f => f.Date.Past())
+                .RuleFor(x => x.CallDate, f => f.Date.Past(1,T0))
                 .RuleFor(x => x.AgentId, f => random.Next() % AgentCount)
                 .RuleFor(x => x.ProductId, f => random.Next() % ProductCount)
                 .RuleFor(x => x.ClientId, f => random.Next() % ClientCount);
@@ -112,7 +112,7 @@ namespace DataGenerator
 
             var testExcelEntries = new Faker<ExcelEntry>()
                 .StrictMode(true)
-                .RuleFor(x => x.Year, f => random.Next() % 10 + 2000)
+                .RuleFor(x => x.Year, f => T0.Year-1)
                 .RuleFor(x => x.Month,f => f.Date.Month())
                 .RuleFor(x => x.AgentId, f => random.Next() % AgentCount)
                 .RuleFor(x => x.FirstName, f => agents[tempAgentId].FirstName)
@@ -123,7 +123,7 @@ namespace DataGenerator
                 .RuleFor(x => x.HourCount, f => tempHourCount)
                 .RuleFor(x => x.Salary, f => tempHourCount * tempHourlyRate)
                 .FinishWith((x,y) => {
-                    //generate temp values for next round
+                    //  generate temp values for next round
                     tempAgentId = random.Next() % AgentCount;
                     tempHourlyRate = random.Next() % MaxHourlyRate;
                     tempHourCount = random.Next() % MaxMonthHours;

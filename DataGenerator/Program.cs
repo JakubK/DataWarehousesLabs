@@ -144,25 +144,27 @@ namespace DataGenerator
 
             var randAgent = RandomObjectFromList(agents, random);
             var tempHourCount = random.Next() % MaxMonthHours;
-            var testExcelEntries = new Faker<ExcelEntry>()
-                .StrictMode(true)
-                .RuleFor(x => x.Year, f => T0.Year - 1)
-                .RuleFor(x => x.Month, f => f.Date.Month())
-                .RuleFor(x => x.AgentId, f => randAgent.Id)
-                .RuleFor(x => x.FirstName, f => randAgent.FirstName)
-                .RuleFor(x => x.LastName, f => randAgent.LastName)
-                .RuleFor(x => x.DepartmentId, f => randAgent.DepartmentId)
-                .RuleFor(x => x.HourlyRate, f => wages[randAgent.Id])
-                .RuleFor(x => x.Bonus, f => random.Next() % TotalBonus)
-                .RuleFor(x => x.HourCount, f => tempHourCount)
-                .RuleFor(x => x.Salary, f => tempHourCount * wages[randAgent.Id])
-                .FinishWith((x, y) =>
-                {
-                    //  generate temp values for next round
-                    randAgent = RandomObjectFromList(agents, random);
-                    tempHourCount = random.Next() % MaxMonthHours;
-                });
-            var excelEntries = await Write("t0_excel.csv", testExcelEntries, ExcelEntryCount);
+            List<ExcelEntry> entries = new List<ExcelEntry>();
+            for(int i = 0;i < ExcelEntryCount;i++)
+            {
+                for(int j = 0;j < 12;j++) {
+                    entries.Add(new ExcelEntry {
+                        Year = T1.Year - 1,
+                        Month = CultureInfo.InvariantCulture.DateTimeFormat.MonthNames[j],
+                        AgentId = randAgent.Id,
+                        FirstName = randAgent.FirstName,
+                        LastName = randAgent.LastName,
+                        DepartmentId = randAgent.DepartmentId,
+                        HourlyRate = wages[randAgent.Id],
+                        Bonus = random.Next() % TotalBonus,
+                        HourCount = tempHourCount,
+                        Salary = tempHourCount * wages[randAgent.Id]
+                    });
+                }
+                randAgent = RandomObjectFromList(agents, random);
+                tempHourCount = random.Next() % MaxMonthHours;
+            }
+            await WriteData("t0_excel.csv", entries);
 
 
             ///////////////////////////////////////////////////////////////////////////////
@@ -239,25 +241,27 @@ namespace DataGenerator
             
             randAgent = RandomObjectFromList(agents, random);
             tempHourCount = random.Next() % MaxMonthHours;
-            testExcelEntries = new Faker<ExcelEntry>()
-                .StrictMode(true)
-                .RuleFor(x => x.Year, f => T1.Year - 1)
-                .RuleFor(x => x.Month, f => f.Date.Month())
-                .RuleFor(x => x.AgentId, f => randAgent.Id)
-                .RuleFor(x => x.FirstName, f => randAgent.FirstName)
-                .RuleFor(x => x.LastName, f => randAgent.LastName)
-                .RuleFor(x => x.DepartmentId, f => randAgent.DepartmentId)
-                .RuleFor(x => x.HourlyRate, f => wages[randAgent.Id])
-                .RuleFor(x => x.Bonus, f => random.Next() % TotalBonus)
-                .RuleFor(x => x.HourCount, f => tempHourCount)
-                .RuleFor(x => x.Salary, f => tempHourCount * wages[randAgent.Id])
-                .FinishWith((x, y) =>
-                {
-                    //  generate temp values for next round
-                    randAgent = RandomObjectFromList(agents, random);
-                    tempHourCount = random.Next() % MaxMonthHours;
-                });
-            await Write("t1_excel.csv", testExcelEntries, ExcelEntryCount);
+            entries = new List<ExcelEntry>();
+            for(int i = 0;i < ExcelEntryCount;i++)
+            {
+                for(int j = 0;j < 12;j++) {
+                    entries.Add(new ExcelEntry {
+                        Year = T1.Year - 1,
+                        Month = CultureInfo.InvariantCulture.DateTimeFormat.MonthNames[j],
+                        AgentId = randAgent.Id,
+                        FirstName = randAgent.FirstName,
+                        LastName = randAgent.LastName,
+                        DepartmentId = randAgent.DepartmentId,
+                        HourlyRate = wages[randAgent.Id],
+                        Bonus = random.Next() % TotalBonus,
+                        HourCount = tempHourCount,
+                        Salary = tempHourCount * wages[randAgent.Id]
+                    });
+                }
+                randAgent = RandomObjectFromList(agents, random);
+                tempHourCount = random.Next() % MaxMonthHours;
+            }
+            await WriteData("t1_excel.csv", entries);
         }
     }
 }

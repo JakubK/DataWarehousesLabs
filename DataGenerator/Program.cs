@@ -21,7 +21,7 @@ namespace DataGenerator
         public const double MaxMargin = 0.3;
         public const int TotalBonus = 300;
         public const int TotalBoughtProductCount = 20;
-        public const int TotalMaxAgentCount = 10;
+        public const int TotalMaxAgentCount = 50;
 
         public const int MinHourlyRate = 15;
         public const int MaxHourlyRate = 40;
@@ -45,9 +45,9 @@ namespace DataGenerator
 
         public const double ClientChangeProbability = 0.15;
 
-        public const double PriceAndMarginChangeProb = 0.5;
+        public const double PriceAndMarginChangeProb = 0.25;
         public const double MaxPriceAndMarginChange = 0.30; // percentage, e.g. 0.3 means that change in price is 30%, should be less than 1
-        public const double ProductChangeProb = 0.05;
+        public const double ProductChangeProb = 0.10;
 
         public const double SalaryRiseProb = 0.15;
         public const double MaxSalaryRise = 0.25;
@@ -142,26 +142,24 @@ namespace DataGenerator
                 wages.Add(agent.Id, (decimal)Math.Round(MinHourlyRate + (MaxHourlyRate - MinHourlyRate) * random.NextDouble(), 2));
             }
 
-            var randAgent = RandomObjectFromList(agents, random);
             var tempHourCount = random.Next() % MaxMonthHours;
             List<ExcelEntry> entries = new List<ExcelEntry>();
-            for(int i = 0;i < ExcelEntryCount;i++)
+            foreach(Agent a in agents)
             {
                 for(int j = 0;j < 12;j++) {
                     entries.Add(new ExcelEntry {
                         Year = T1.Year - 1,
                         Month = CultureInfo.InvariantCulture.DateTimeFormat.MonthNames[j],
-                        AgentId = randAgent.Id,
-                        FirstName = randAgent.FirstName,
-                        LastName = randAgent.LastName,
-                        DepartmentId = randAgent.DepartmentId,
-                        HourlyRate = wages[randAgent.Id],
+                        AgentId = a.Id,
+                        FirstName = a.FirstName,
+                        LastName = a.LastName,
+                        DepartmentId = a.DepartmentId,
+                        HourlyRate = wages[a.Id],
                         Bonus = random.Next() % TotalBonus,
                         HourCount = tempHourCount,
-                        Salary = tempHourCount * wages[randAgent.Id]
+                        Salary = tempHourCount * wages[a.Id]
                     });
                 }
-                randAgent = RandomObjectFromList(agents, random);
                 tempHourCount = random.Next() % MaxMonthHours;
             }
             await WriteData("t0_excel.csv", entries);
@@ -239,26 +237,24 @@ namespace DataGenerator
                 }
             }
             
-            randAgent = RandomObjectFromList(agents, random);
             tempHourCount = random.Next() % MaxMonthHours;
             entries = new List<ExcelEntry>();
-            for(int i = 0;i < ExcelEntryCount;i++)
+            foreach(Agent a in agents)
             {
                 for(int j = 0;j < 12;j++) {
                     entries.Add(new ExcelEntry {
                         Year = T1.Year - 1,
                         Month = CultureInfo.InvariantCulture.DateTimeFormat.MonthNames[j],
-                        AgentId = randAgent.Id,
-                        FirstName = randAgent.FirstName,
-                        LastName = randAgent.LastName,
-                        DepartmentId = randAgent.DepartmentId,
-                        HourlyRate = wages[randAgent.Id],
+                        AgentId = a.Id,
+                        FirstName = a.FirstName,
+                        LastName = a.LastName,
+                        DepartmentId = a.DepartmentId,
+                        HourlyRate = wages[a.Id],
                         Bonus = random.Next() % TotalBonus,
                         HourCount = tempHourCount,
-                        Salary = tempHourCount * wages[randAgent.Id]
+                        Salary = tempHourCount * wages[a.Id]
                     });
                 }
-                randAgent = RandomObjectFromList(agents, random);
                 tempHourCount = random.Next() % MaxMonthHours;
             }
             await WriteData("t1_excel.csv", entries);

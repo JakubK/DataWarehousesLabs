@@ -30,9 +30,9 @@ namespace DataGenerator
 
         // Data row count
         public const int AgentCount = 50;
-        public const int ClientCount = 10000;
+        public const int ClientCount = 1000;
         public const int DepartmentCount = 5;
-        public const int PhoneCallCount = 50000;
+        public const int PhoneCallCount = 5000;
         public const int ProducerCount = 10;
         public const int ProductCount = 100;
         public const int ExcelEntryCount = 100;
@@ -40,7 +40,7 @@ namespace DataGenerator
 
 
         // T1 change probabilities
-        public const double AgentLaidOffProb = 0.05;
+        public const double AgentLaidOffProb = 0.50;
         public const double AgentDepartmentChangeProb = 0.05;
 
         public const double ClientChangeProbability = 0.15;
@@ -129,11 +129,11 @@ namespace DataGenerator
             var testCalls = new Faker<PhoneCall>()
                 .StrictMode(true)
                 .RuleFor(x => x.Id, f => phoneCallIds++)
-                .RuleFor(x => x.Result, f => (random.Next() % callSuccessChance) == 0 ? false : true)
+                .RuleFor(x => x.Result, f => (callSuccessChance >= random.NextDouble()))
                 .RuleFor(x => x.CallDate, f => f.Date.Past(1, T0))
                 .RuleFor(x => x.AgentId, f => random.Next() % AgentCount)
                 .RuleFor(x => x.ProductId, f => random.Next() % ProductCount)
-                .RuleFor(x => x.ClientId, RandomObjectFromList(clients, random).PhoneNumber);
+                .RuleFor(x => x.ClientId,f => RandomObjectFromList(clients, random).PhoneNumber);
             await Write("t0_calls.csv", testCalls, PhoneCallCount);
 
             var wages = new Dictionary<int, decimal>();
@@ -148,7 +148,7 @@ namespace DataGenerator
             {
                 for(int j = 0;j < 12;j++) {
                     entries.Add(new ExcelEntry {
-                        Year = T1.Year - 1,
+                        Year = T0.Year - 1,
                         Month = CultureInfo.InvariantCulture.DateTimeFormat.MonthNames[j],
                         AgentId = a.Id,
                         FirstName = a.FirstName,
@@ -222,7 +222,7 @@ namespace DataGenerator
             testCalls = new Faker<PhoneCall>()
                 .StrictMode(true)
                 .RuleFor(x => x.Id, f => phoneCallIds++)
-                .RuleFor(x => x.Result, f => (random.Next() % callSuccessChance) == 0 ? false : true)
+                .RuleFor(x => x.Result, f => (callSuccessChance >= random.NextDouble()))
                 .RuleFor(x => x.CallDate, f => f.Date.Past(1, T1))
                 .RuleFor(x => x.AgentId, f => RandomObjectFromList(agents, random).Id)
                 .RuleFor(x => x.ProductId, f => RandomObjectFromList(products, random).Id)

@@ -40,8 +40,7 @@ namespace DataGenerator
 
 
         // T1 change probabilities
-        public const double AgentLaidOffProb = 0.50;
-        public const double AgentDepartmentChangeProb = 0.05;
+        public const double AgentLaidOffProb = 0.05;
 
         public const double ClientChangeProbability = 0.15;
 
@@ -172,12 +171,6 @@ namespace DataGenerator
 
             for (int i = 0; i < agents.Count; i++)
             {
-                if (random.NextDouble() <= AgentDepartmentChangeProb)
-                {
-                    var randDepInd = random.Next(departments.Count);
-                    agents[i].DepartmentId = departments[randDepInd].Id;
-                }
-
                 if (random.NextDouble() <= AgentLaidOffProb)
                 {
                     agents[i] = testAgents.Generate(1)[0];

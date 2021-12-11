@@ -10,7 +10,7 @@ BULK INSERT ProducentTemp
 	WITH
 	(
 		FIRSTROW = 2,
-		FIELDTERMINATOR = ',',
+		FIELDTERMINATOR = '|',
 		ROWTERMINATOR = '\n',
 		TABLOCK
 	)

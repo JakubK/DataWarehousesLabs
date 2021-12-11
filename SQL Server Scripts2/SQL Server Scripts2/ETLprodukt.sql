@@ -12,7 +12,7 @@ BULK INSERT ProducentTemp
 	WITH
 	(
 		FIRSTROW = 2,
-		FIELDTERMINATOR = ',',
+		FIELDTERMINATOR = '|',
 		ROWTERMINATOR = '\n',
 		TABLOCK
 	)
@@ -27,11 +27,10 @@ BULK INSERT ProduktTemp
 	WITH
 	(
 		FIRSTROW = 2,
-		FIELDTERMINATOR = ',',
+		FIELDTERMINATOR = '|',
 		ROWTERMINATOR = '\n',
 		TABLOCK
 	)
-	SELECT [Id_Producent] FROM ProduktTemp
 
 
 MERGE Produkt t USING ProduktTemp s

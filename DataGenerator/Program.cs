@@ -85,6 +85,7 @@ namespace DataGenerator
                 .StrictMode(true)
                 .RuleFor(x => x.Id, f => departmentIds++)
                 .RuleFor(x => x.Name, f => f.Commerce.Department())
+                .RuleFor(x => x.Country, f => f.Address.Country())
                 .RuleFor(x => x.Location, f => f.Address.City())
                 .RuleFor(x => x.MaxAgentCount, f => random.Next() % TotalMaxAgentCount);
             var departments = await Write("t0_departments.csv", testDepartments, DepartmentCount);

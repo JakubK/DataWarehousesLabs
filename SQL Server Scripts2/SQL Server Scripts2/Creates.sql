@@ -126,7 +126,8 @@ CREATE TABLE [Polaczenie]
  [Id_Premia]   int NOT NULL ,
 
 
- CONSTRAINT [PK_91] PRIMARY KEY CLUSTERED ([Id_Agent] ASC, [Id_Produkt] ASC, [Id_Klient] ASC, [Id_Czas] ASC, [Id_Data] ASC, [Id_Rezultat] ASC, [Id_Premia] ASC),
+ CONSTRAINT [PK_91] PRIMARY KEY CLUSTERED ([Id_Agent] ASC, [Id_Produkt] ASC, [Id_Klient] ASC,
+ [Id_Czas] ASC, [Id_Data] ASC, [Id_Rezultat] ASC, [Id_Premia] ASC),
  CONSTRAINT [FK_11] FOREIGN KEY ([Id_Produkt])  REFERENCES [Produkt]([Id]),
  CONSTRAINT [FK_13] FOREIGN KEY ([Id_Klient])  REFERENCES [Klient]([Id]),
  CONSTRAINT [FK_14] FOREIGN KEY ([Id_Agent])  REFERENCES [Agent]([Id]),

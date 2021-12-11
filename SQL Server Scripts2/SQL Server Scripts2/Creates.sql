@@ -1,86 +1,77 @@
+USE master
+GO
+alter  database  CALLCENTER set single_user with rollback immediate
 
+DROP DATABASE IF EXISTS CALLCENTER;
+GO
+
+CREATE DATABASE CALLCENTER
+GO
+
+USE CALLCENTER
+GO
 
 CREATE TABLE [Czas]
 (
  [Id]      int IDENTITY(1,1) PRIMARY KEY,
  [Godzina] int NOT NULL ,
- [Minuta]  int NOT NULL ,
+ [Minuta]  int NOT NULL
 );
 GO
 
 CREATE TABLE [Data]
 (
- [Id]             int NOT NULL ,
+ [Id]             int IDENTITY(1,1) PRIMARY KEY,
  [Rok]            int NOT NULL ,
  [Miesiac]        int NOT NULL ,
  [Nazwa Miesiaca] varchar(15) NOT NULL ,
- [Dzien]          int NOT NULL ,
-
-
- CONSTRAINT [PK_145] PRIMARY KEY CLUSTERED ([Id] ASC)
+ [Dzien]          int NOT NULL
 );
 GO
 
 CREATE TABLE [Dzial]
 (
- [Id]     int NOT NULL ,
+ [Id]     int IDENTITY(1,1) PRIMARY KEY,
  [Nazwa]  varchar(50) NOT NULL ,
  [Kraj]   varchar(50) NOT NULL ,
- [Miasto] varchar(50) NOT NULL ,
-
-
- CONSTRAINT [PK_56] PRIMARY KEY CLUSTERED ([Id] ASC)
+ [Miasto] varchar(50) NOT NULL
 );
 GO
 
 CREATE TABLE [Klient]
 (
- [Id]             int NOT NULL ,
- [Numer Telefonu] nvarchar(50) NOT NULL ,
-
-
- CONSTRAINT [PK_65] PRIMARY KEY CLUSTERED ([Id] ASC)
+ [Id]             int IDENTITY(1,1) PRIMARY KEY,
+ [Numer Telefonu] nvarchar(50) NOT NULL
 );
 GO
 
 CREATE TABLE [PoPremii]
 (
- [Id]    int NOT NULL ,
- [Tresc] varchar(50) NOT NULL ,
-
-
- CONSTRAINT [PK_176] PRIMARY KEY CLUSTERED ([Id] ASC)
+ [Id]    int IDENTITY(1,1) PRIMARY KEY,
+ [Tresc] varchar(50) NOT NULL
 );
 GO
 
 CREATE TABLE [Producent]
 (
- [Id]    int NOT NULL ,
- [Nazwa] nvarchar(50) NOT NULL ,
-
-
- CONSTRAINT [PK_60] PRIMARY KEY CLUSTERED ([Id] ASC)
+ [Id]    int IDENTITY(1,1) PRIMARY KEY,
+ [Nazwa] nvarchar(50) NOT NULL
 );
 GO
 
 CREATE TABLE [Rezultat]
 (
- [Tresc] varchar(30) NOT NULL ,
- [Id]    int NOT NULL ,
-
-
- CONSTRAINT [PK_159] PRIMARY KEY CLUSTERED ([Id] ASC)
+ [Id]    int IDENTITY(1,1) PRIMARY KEY,
+ [Tresc] varchar(30) NOT NULL
 );
 GO
 
 CREATE TABLE [Agent]
 (
- [Id]              int NOT NULL ,
+ [Id]              int IDENTITY(1,1) PRIMARY KEY,
  [Imie i Nazwisko] varchar(50) NOT NULL ,
  [Id_Dzial]        int NOT NULL ,
 
-
- CONSTRAINT [PK_39] PRIMARY KEY CLUSTERED ([Id] ASC),
  CONSTRAINT [FK_15] FOREIGN KEY ([Id_Dzial])  REFERENCES [Dzial]([Id])
 );
 GO
@@ -88,12 +79,10 @@ GO
 
 CREATE TABLE [Produkt]
 (
+ [Id]           int IDENTITY(1,1) PRIMARY KEY,
  [Id_Producent] int NOT NULL ,
  [Nazwa]        varchar(50) NOT NULL ,
- [Id]           int NOT NULL ,
 
-
- CONSTRAINT [PK_87] PRIMARY KEY CLUSTERED ([Id] ASC),
  CONSTRAINT [FK_22] FOREIGN KEY ([Id_Producent])  REFERENCES [Producent]([Id])
 );
 GO

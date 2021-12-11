@@ -1,10 +1,12 @@
 USE CALLCENTER
 GO
 
-TRUNCATE TABLE Czas;
+--TRUNCATE TABLE Czas;
 
 DECLARE @HourInProcess int = 0;
 DECLARE @MinuteInProcess int = 0;
+
+
 
 WHILE @HourInProcess <= 23
 BEGIN

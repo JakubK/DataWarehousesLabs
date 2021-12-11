@@ -29,7 +29,7 @@ namespace DataGenerator
 
 
         // Data row count
-        public const int AgentCount = 50;
+        public const int AgentCount = 500;
         public const int ClientCount = 1000;
         public const int DepartmentCount = 5;
         public const int PhoneCallCount = 5000;
@@ -40,7 +40,7 @@ namespace DataGenerator
 
 
         // T1 change probabilities
-        public const double AgentLaidOffProb = 0.05;
+        public const double AgentLaidOffProb = 0.1;
 
         public const double ClientChangeProbability = 0.15;
 

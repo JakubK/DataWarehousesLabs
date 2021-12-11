@@ -17,12 +17,13 @@ BULK INSERT DzialTemp
 		TABLOCK
 	)
 
+
 If (object_id('dbo.AgentTemp') is not null) DROP TABLE dbo.AgentTemp;
-CREATE TABLE AgentTemp(FirstName varchar(100), LastName varchar(100), [Id_Dzial] int);
+CREATE TABLE AgentTemp(Id int, FirstName varchar(100), LastName varchar(100), [Id_Dzial] int);
 GO
 
 BULK INSERT AgentTemp
-	FROM 'C:\dev\HDLab\DataWarehousesLabs\DataGenerator\t0_agents.csv'
+	FROM 'C:\dev\HDLab\DataWarehousesLabs\DataGenerator\t1_agents.csv'
 	WITH
 	(
 		FIRSTROW = 2,
@@ -31,14 +32,24 @@ BULK INSERT AgentTemp
 		TABLOCK
 	)
 
+If (object_id('ETLAgentData') is not null) Drop View ETLAgentData;
+GO
 
-MERGE Agent t USING AgentTemp s
+CREATE VIEW ETLAgentData
+AS
+SELECT
+	[Imie i Nazwisko] = CAST(FirstName + ' ' + LastName as varchar(100)),
+	d.Id AS Id_Dzial
+	FROM AgentTemp aTmp JOIN DzialTemp dTmp ON aTmp.Id_Dzial = dTmp.Id
+	JOIN Dzial d ON d.Nazwa = dTmp.Nazwa;
+GO
+
+MERGE Agent t USING ETLAgentData s
 	ON t.[Imie i Nazwisko] = s.[Imie i Nazwisko]
 	WHEN NOT MATCHED BY TARGET THEN
-		INSERT ([Imie i Nazwisko], [Id_Dzial]) VALUES(s.[Imie i Nazwisko], 
-		(SELECT p.Id 
-		FROM Producent p JOIN ProducentTemp tmp ON p.Nazwa = tmp.Nazwa
-		WHERE s.Id_Producent = tmp.Id));
+		INSERT ([Imie i Nazwisko], [Id_Dzial]) VALUES(s.[Imie i Nazwisko], Id_Dzial);
 
+
+Drop View ETLAgentData
 DROP TABLE DzialTemp
-DROP TABLE ProduktTemp
+DROP TABLE AgentTemp

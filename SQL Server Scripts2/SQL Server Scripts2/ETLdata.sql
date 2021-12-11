@@ -1,6 +1,7 @@
+use CALLCENTER;
 DECLARE @YearInProcess int = 2020;
 DECLARE @MonthInProcess int = 1;
-DECLARE @DayInProcess int = 0;
+DECLARE @DayInProcess int = 1;
 
 DECLARE @UpperYearBound int = 2030;
 
@@ -19,7 +20,7 @@ WHILE @YearInProcess <= @UpperYearBound
 						SET @DayInProcess = @DayInProcess + 1
 					END
 				SET @MonthInProcess = @MonthInProcess + 1
-				SET @DayInProcess = 0
+				SET @DayInProcess = 1
 			END
 		SET @YearInProcess = @YearInProcess + 1
 	END

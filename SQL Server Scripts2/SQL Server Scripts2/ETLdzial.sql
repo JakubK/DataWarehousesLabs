@@ -1,5 +1,3 @@
---Not finished, changes in data generator needed first
-
 USE CALLCENTER
 GO
 

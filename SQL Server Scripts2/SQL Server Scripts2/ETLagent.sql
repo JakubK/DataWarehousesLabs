@@ -1,5 +1,3 @@
--- its a mess currently, a lot needs to be done
-
 USE CALLCENTER
 GO
 

@@ -6,7 +6,7 @@ CREATE TABLE statTemp(Year int,Month int,AgentId int ,FirstName NVARCHAR,LastNam
 GO
 
 BULK INSERT dbo.statTemp
-	FROM 'D:\DataWarehousesLabs\DataGenerator\t0_excel.csv'
+	FROM 'C:\dev\HDLab\DataWarehousesLabs\DataGenerator\t0_excel.csv'
 	WITH
 	(
 		FIRSTROW = 2,

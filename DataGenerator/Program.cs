@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 using Bogus;
 using CsvHelper;
-
+using CsvHelper.Configuration;
 using DataGenerator.Models;
 
 namespace DataGenerator
@@ -63,8 +63,14 @@ namespace DataGenerator
         // Write generated data to file
         static async Task WriteData<T>(string filename, List<T> data) where T : class
         {
+            var config = new CsvConfiguration(CultureInfo.InvariantCulture)
+            {
+                NewLine = Environment.NewLine,
+                Delimiter = "|"
+            };
+
             using (var writer = new StreamWriter(filename))
-            using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
+            using (var csv = new CsvWriter(writer,config))
             {
                 await csv.WriteRecordsAsync(data);
             }
@@ -86,7 +92,10 @@ namespace DataGenerator
                 .RuleFor(x => x.Id, f => departmentIds++)
                 .RuleFor(x => x.Name, f => f.Commerce.Department())
                 .RuleFor(x => x.Country, f => f.Address.Country())
-                .RuleFor(x => x.Location, f => f.Address.City())
+                .RuleFor(x => x.Location, f => f.Address.City()
+                    .Replace(',',' ')
+                    .Replace('"',' ')
+                    .Trim())
                 .RuleFor(x => x.MaxAgentCount, f => random.Next() % TotalMaxAgentCount);
             var departments = await Write("t0_departments.csv", testDepartments, DepartmentCount);
 

@@ -47,7 +47,7 @@ GO
 CREATE TABLE [Klient]
 (
  [Id]             int IDENTITY(1,1) PRIMARY KEY,
- [Numer Telefonu] nvarchar(50) NOT NULL
+ [Numer Telefonu] nvarchar(50)
 );
 GO
 

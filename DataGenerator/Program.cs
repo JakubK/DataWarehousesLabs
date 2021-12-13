@@ -26,10 +26,11 @@ namespace DataGenerator
         public const int MinHourlyRate = 15;
         public const int MaxHourlyRate = 40;
         public const int MaxMonthHours = 200;
+        public const double BonusChance = 0.25;
 
 
         // Data row count
-        public const int AgentCount = 50;
+        public const int AgentCount = 500;
         public const int ClientCount = 1000;
         public const int DepartmentCount = 5;
         public const int PhoneCallCount = 5000;
@@ -40,7 +41,7 @@ namespace DataGenerator
 
 
         // T1 change probabilities
-        public const double AgentLaidOffProb = 0.05;
+        public const double AgentLaidOffProb = 0.10;
 
         public const double ClientChangeProbability = 0.15;
 
@@ -154,7 +155,7 @@ namespace DataGenerator
                         LastName = a.LastName,
                         DepartmentId = a.DepartmentId,
                         HourlyRate = wages[a.Id],
-                        Bonus = random.Next() % TotalBonus,
+                        Bonus = random.Next() <= BonusChance ? random.Next() % TotalBonus : 0,
                         HourCount = tempHourCount,
                         Salary = tempHourCount * wages[a.Id]
                     });
@@ -243,7 +244,7 @@ namespace DataGenerator
                         LastName = a.LastName,
                         DepartmentId = a.DepartmentId,
                         HourlyRate = wages[a.Id],
-                        Bonus = random.Next() % TotalBonus,
+                        Bonus = random.Next() <= BonusChance ? random.Next() % TotalBonus : 0,
                         HourCount = tempHourCount,
                         Salary = tempHourCount * wages[a.Id]
                     });

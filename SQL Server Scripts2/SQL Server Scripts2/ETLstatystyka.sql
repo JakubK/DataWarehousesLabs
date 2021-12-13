@@ -1,19 +1,21 @@
+USE CALLCENTER
+GO
 
-	USE CALLCENTER
-	GO
+If (object_id('dbo.statTemp') is not null) DROP TABLE dbo.statTemp;
+CREATE TABLE statTemp(Year int,[Month] TEXT,AgentId int ,FirstName TEXT,LastName TEXT,DepartmentId int,HourlyRate decimal,Bonus decimal,HourCount int,Salary decimal);
+GO
+--DECLARE @PathToFile varchar(200) = (SELECT TOP(1) PathToFile FROM TmpPaths WHERE name ='excel');
+--PRINT @PathToFile;
 
-	If (object_id('dbo.statTemp') is not null) DROP TABLE dbo.statTemp;
-	CREATE TABLE statTemp(Year int,[Month] TEXT,AgentId int ,FirstName TEXT,LastName TEXT,DepartmentId int,HourlyRate decimal,Bonus decimal,HourCount int,Salary decimal);
-	GO
-	BULK INSERT dbo.statTemp
-		FROM 'D:\DataWarehousesLabs\DataGenerator\t0_excel.csv'
-		WITH
-		(
-			FIRSTROW = 2,
-			FIELDTERMINATOR = '|',
-			ROWTERMINATOR = '\n',
-			TABLOCK
-		)
+BULK INSERT dbo.statTemp
+	FROM 'C:\dev\HDLab\DataWarehousesLabs\DataGenerator\t0_excel.csv'
+	WITH
+	(
+		FIRSTROW = 2,
+		FIELDTERMINATOR = '|',
+		ROWTERMINATOR = '\n',
+		TABLOCK
+	)
 
 If (object_id('agentIds') is not null) DROP VIEW agentIds;
 GO

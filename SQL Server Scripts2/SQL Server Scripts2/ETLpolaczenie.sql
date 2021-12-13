@@ -115,7 +115,7 @@ FROM
 	JOIN Czas c ON c.Godzina = DatePart(Hour, pTmp.DataPolaczenia) AND c.Minuta = DatePart(MINUTE, pTmp.DataPolaczenia)
 	JOIN Data d ON d.Rok = DatePart(YEAR, pTmp.DataPolaczenia) AND d.Miesiac =  DatePart(MONTH, pTmp.DataPolaczenia) AND d.Dzien = DatePart(DAY, pTmp.DataPolaczenia)
 	JOIN Rezultat r ON r.Tresc = (CASE pTmp.Rezultat WHEN 'True' Then 'Sprzedano' ELSE 'Niesprzedano' END)
-	JOIN PoPremii pp ON pp.Tresc = (CASE 1 WHEN 'Po premii' ELSE 'Nie po premii' END)
+	JOIN PoPremii pp ON pp.Tresc = (CASE 1 WHEN 1 THEN 'Po premii' ELSE 'Nie po premii' END)
 	) AS x
 
 GO

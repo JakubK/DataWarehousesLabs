@@ -1,6 +1,5 @@
 USE CALLCENTER
 GO
-
 If (object_id('dbo.statTemp') is not null) DROP TABLE dbo.statTemp;
 CREATE TABLE statTemp(Year int,[Month] TEXT,AgentId int ,FirstName TEXT,LastName TEXT,DepartmentId int,HourlyRate decimal(18,2),Bonus decimal(18,2),HourCount int,Salary decimal(18,2));
 GO

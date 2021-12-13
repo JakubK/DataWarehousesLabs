@@ -21,7 +21,7 @@ CREATE TABLE AgentTemp(Id int, FirstName varchar(100), LastName varchar(100), [I
 GO
 
 BULK INSERT AgentTemp
-	FROM 'C:\dev\HDLab\DataWarehousesLabs\DataGenerator\t1_agents.csv'
+	FROM 'C:\dev\HDLab\DataWarehousesLabs\DataGenerator\t0_agents.csv'
 	WITH
 	(
 		FIRSTROW = 2,

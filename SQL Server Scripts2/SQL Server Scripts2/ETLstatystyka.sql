@@ -2,7 +2,7 @@ USE CALLCENTER
 GO
 
 If (object_id('dbo.statTemp') is not null) DROP TABLE dbo.statTemp;
-CREATE TABLE statTemp(Year int,[Month] TEXT,AgentId int ,FirstName TEXT,LastName TEXT,DepartmentId int,HourlyRate decimal,Bonus decimal,HourCount int,Salary decimal);
+CREATE TABLE statTemp(Year int,[Month] TEXT,AgentId int ,FirstName TEXT,LastName TEXT,DepartmentId int,HourlyRate decimal(18,2),Bonus decimal(18,2),HourCount int,Salary decimal(18,2));
 GO
 --DECLARE @PathToFile varchar(200) = (SELECT TOP(1) PathToFile FROM TmpPaths WHERE name ='excel');
 --PRINT @PathToFile;
@@ -27,6 +27,7 @@ GO
 
 MERGE StatystykaPracownicza t USING agentIds s
 	ON t.Id_Data = (SELECT TOP 1 Id FROM dbo.Data WHERE Rok = s.Year AND Miesiac = MONTH(CAST(s.Month as VARCHAR) + ' 1 2021')  AND Dzien = 1)
+	AND t.Id_Agenta = s.Id
 	WHEN NOT MATCHED
 		THEN
 			INSERT(Id_Agenta, Id_Data, Premia, [Ilosc godzin], [Wyplata], [Stawka za godzine])

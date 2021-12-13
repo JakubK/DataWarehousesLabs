@@ -99,10 +99,10 @@ CREATE TABLE [StatystykaPracownicza]
 (
  [Id_Agenta]         int NOT NULL ,
  [Id_Data]           int NOT NULL ,
- [Premia]            decimal(18,0) NOT NULL ,
+ [Premia]            decimal(18,2) NOT NULL ,
  [Ilosc Godzin]      int NOT NULL ,
- [Wyplata]           decimal(18,0) NOT NULL ,
- [Stawka za godzine] decimal(18,0) NOT NULL ,
+ [Wyplata]           decimal(18,2) NOT NULL ,
+ [Stawka za godzine] decimal(18,2) NOT NULL ,
 
 
  CONSTRAINT [PK_90] PRIMARY KEY CLUSTERED ([Id_Agenta] ASC, [Id_Data] ASC),
@@ -114,9 +114,9 @@ GO
 
 CREATE TABLE [Polaczenie]
 (
- [Koszt]       decimal(18,0) NOT NULL ,
- [Marza]       decimal(18,0) NOT NULL ,
- [Zysk]        decimal(18,0) NOT NULL ,
+ [Koszt]       decimal(18,2) NOT NULL ,
+ [Marza]       decimal(18,2) NOT NULL ,
+ [Zysk]        decimal(18,2) NOT NULL ,
  [Id_Agent]    int NOT NULL ,
  [Id_Produkt]  int NOT NULL ,
  [Id_Klient]   int NOT NULL ,

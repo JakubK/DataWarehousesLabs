@@ -97,23 +97,37 @@ SELECT
 FROM
 	(SELECT
 		Id_Agent = a.Id,
-		Id_Produkt pr.Id,
+		Id_Produkt = pr.Id,
 		Id_Klient = k.Id,
-		Id_Czas c.Id,
-		Id_Data d.Id,
-		Id_Rezultat r.Id,
-		Id_PoPremii pp.Id,
-		Koszt prTmp.Cena,
-		Marza prTmp.Marza,
-		Zysk prTmp.Cena *  prTmp.Marza
+		Id_Czas = c.Id,
+		Id_Data = d.Id,
+		Id_Rezultat = r.Id,
+		Id_PoPremii = pp.Id,
+		Koszt = prTmp.Cena,
+		Marza = prTmp.Marza,
+		Zysk = prTmp.Cena * prTmp.Marza
 	FROM PolaczenieTemp pTmp
 	JOIN AgentTemp aTmp ON pTmp.Id_Agent = aTmp.Id
 	JOIN Agent a ON a.[Imie i Nazwisko] = CAST(aTmp.FirstName + ' ' + aTmp.LastName as varchar(100))
 	JOIN ProduktTemp prTmp ON pTmp.Id_Produkt = prTmp.Id
 	JOIN Produkt pr ON pr.Nazwa = prTmp.Nazwa
 	JOIN Klient k ON pTmp.Id_Klient = k.[Numer Telefonu]
-	JOIN Czas c ON
-	JOIN Data d ON 
-	JOIN Rezultat r ON
-	JOIN PoPremii pp ON
-	)
+	JOIN Czas c ON c.Godzina = DatePart(Hour, pTmp.DataPolaczenia) AND c.Minuta = DatePart(MINUTE, pTmp.DataPolaczenia)
+	JOIN Data d ON d.Rok = DatePart(YEAR, pTmp.DataPolaczenia) AND d.Miesiac =  DatePart(MONTH, pTmp.DataPolaczenia) AND d.Dzien = DatePart(DAY, pTmp.DataPolaczenia)
+	JOIN Rezultat r ON r.Tresc = (CASE pTmp.Rezultat WHEN 'True' Then 'Sprzedano' ELSE 'Niesprzedano' END)
+	JOIN PoPremii pp ON pp.Tresc = (CASE 1 WHEN 'Po premii' ELSE 'Nie po premii' END)
+	) AS x
+
+GO
+
+MERGE INTO Polaczenie as t USING vETLpolacznie as s
+		ON 	t.Id_Agent = s.Id_Agent
+		AND t.Id_Produkt = s.Id_Produkt
+		AND t.Id_Klient = s.Id_Klient
+		AND t.Id_Czas = s.Id_Czas
+		AND t.Id_Data = s.Id_Data
+		AND t.Id_Rezultat = s.Id_Rezultat
+		AND t.Id_Premia = s.Id_PoPremii
+			WHEN Not Matched THEN
+					INSERT Values (s.Id_Agent, s.Id_Produkt, s.Id_Klient, s.Id_Czas, s.Id_Data, 
+									s.Id_Rezultat, s.Id_PoPremii, s.Koszt, s.Marza, s.Zysk);

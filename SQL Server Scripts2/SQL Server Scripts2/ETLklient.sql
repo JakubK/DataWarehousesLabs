@@ -19,7 +19,7 @@ MERGE Klient t USING KlientTemp s
 	ON t.[Numer Telefonu] = s.[Numer Telefonu]
 	WHEN NOT MATCHED BY TARGET THEN
 		INSERT ([Numer Telefonu]) VALUES(s.[Numer Telefonu])
-	WHEN NOT MATCHED BY SOURCE THEN UPDATE
-		SET t.[Numer Telefonu] = NULL;
+	WHEN NOT MATCHED BY SOURCE THEN 
+		UPDATE SET t.[Numer Telefonu] = NULL;
 
 DROP TABLE KlientTemp

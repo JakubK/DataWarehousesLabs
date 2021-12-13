@@ -165,7 +165,7 @@ namespace DataGenerator
                         LastName = a.LastName,
                         DepartmentId = a.DepartmentId,
                         HourlyRate = wages[a.Id],
-                        Bonus = random.Next() <= BonusChance ? random.Next() % TotalBonus : 0,
+                        Bonus = random.NextDouble() <= BonusChance ? random.Next() % TotalBonus : 0,
                         HourCount = tempHourCount,
                         Salary = tempHourCount * wages[a.Id]
                     });
@@ -254,7 +254,7 @@ namespace DataGenerator
                         LastName = a.LastName,
                         DepartmentId = a.DepartmentId,
                         HourlyRate = wages[a.Id],
-                        Bonus = random.Next() <= BonusChance ? random.Next() % TotalBonus : 0,
+                        Bonus = random.NextDouble() <= BonusChance ? random.Next() % TotalBonus : 0,
                         HourCount = tempHourCount,
                         Salary = tempHourCount * wages[a.Id]
                     });

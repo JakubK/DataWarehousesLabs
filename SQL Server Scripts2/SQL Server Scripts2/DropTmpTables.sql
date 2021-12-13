@@ -1,0 +1,3 @@
+USE CALLCENTER
+
+DROP TABLE TmpPaths;

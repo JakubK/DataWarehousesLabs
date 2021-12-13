@@ -5,7 +5,7 @@ CREATE TABLE AgentTemp(Id int, FirstName varchar(100), LastName varchar(100), [I
 GO
 
 BULK INSERT AgentTemp
-	FROM 'C:\dev\HDLab\DataWarehousesLabs\DataGenerator\t1_agents.csv'
+	FROM 'C:\dev\HDLab\DataWarehousesLabs\DataGenerator\t0_agents.csv'
 	WITH
 	(
 		FIRSTROW = 2,
@@ -31,7 +31,7 @@ BULK INSERT ProduktTemp
 
 If (object_id('dbo.PolaczenieTemp') is not null) DROP TABLE dbo.PolaczenieTemp;
 CREATE TABLE PolaczenieTemp(Id int, DataPolaczenia smalldatetime, Rezultat nvarchar(5),
-							Id_Produktu int, Id_Agenta int, Id_Klienta varchar(30));
+							Id_Produkt int, Id_Agent int, Id_Klient varchar(30));
 GO
 
 BULK INSERT PolaczenieTemp
@@ -62,7 +62,7 @@ BULK INSERT dbo.statTemp
 		TABLOCK
 	)
 
-	If (object_id('dbo.KlientTemp') is not null) DROP TABLE dbo.KlientTemp;
+If (object_id('dbo.KlientTemp') is not null) DROP TABLE dbo.KlientTemp;
 CREATE TABLE KlientTemp([Numer Telefonu] varchar(100));
 GO
 
@@ -74,4 +74,46 @@ BULK INSERT KlientTemp
 		FIELDTERMINATOR = '|',
 		ROWTERMINATOR = '\n',
 		TABLOCK
+	)
+
+
+
+If (object_id('vETLpolacznie') is not null) Drop view vETLpolacznie;
+GO
+
+CREATE VIEW vETLpolacznie
+AS
+SELECT
+	Id_Agent,
+	Id_Produkt,
+	Id_Klient,
+	Id_Czas,
+	Id_Data,
+	Id_Rezultat,
+	Id_PoPremii,
+	Koszt,
+	Marza,
+	Zysk
+FROM
+	(SELECT
+		Id_Agent = a.Id,
+		Id_Produkt pr.Id,
+		Id_Klient = k.Id,
+		Id_Czas c.Id,
+		Id_Data d.Id,
+		Id_Rezultat r.Id,
+		Id_PoPremii pp.Id,
+		Koszt prTmp.Cena,
+		Marza prTmp.Marza,
+		Zysk prTmp.Cena *  prTmp.Marza
+	FROM PolaczenieTemp pTmp
+	JOIN AgentTemp aTmp ON pTmp.Id_Agent = aTmp.Id
+	JOIN Agent a ON a.[Imie i Nazwisko] = CAST(aTmp.FirstName + ' ' + aTmp.LastName as varchar(100))
+	JOIN ProduktTemp prTmp ON pTmp.Id_Produkt = prTmp.Id
+	JOIN Produkt pr ON pr.Nazwa = prTmp.Nazwa
+	JOIN Klient k ON pTmp.Id_Klient = k.[Numer Telefonu]
+	JOIN Czas c ON
+	JOIN Data d ON 
+	JOIN Rezultat r ON
+	JOIN PoPremii pp ON
 	)

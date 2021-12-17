@@ -24,6 +24,9 @@ SELECT Id, [Imie i Nazwisko], Month, Year, Bonus, HourCount, Salary, HourlyRate 
 INNER JOIN dbo.statTemp ON dbo.Agent.[Imie i Nazwisko] = CAST(dbo.statTemp.[FirstName] as VARCHAR) + ' ' + CAST(dbo.statTemp.[LastName] as VARCHAR);
 GO
 
+--SELECT Year, Rok, Dzien FROM dbo.Data
+--INNER JOIN agentIds on agentIds.Year = Rok;
+
 MERGE StatystykaPracownicza t USING agentIds s
 	ON t.Id_Data = (SELECT TOP 1 Id FROM dbo.Data WHERE Rok = s.Year AND Miesiac = MONTH(CAST(s.Month as VARCHAR) + ' 1 2021')  AND Dzien = 1)
 	AND t.Id_Agenta = s.Id

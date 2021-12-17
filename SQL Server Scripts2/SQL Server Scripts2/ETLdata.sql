@@ -1,7 +1,7 @@
 use CALLCENTER;
 
-DECLARE @LowerYearBound int = 1960;
-DECLARE @UpperYearBound int = 2040;
+DECLARE @LowerYearBound int = 2010;
+DECLARE @UpperYearBound int = 2011;
 
 DECLARE @YearInProcess int = @LowerYearBound;
 DECLARE @MonthInProcess int = 1;

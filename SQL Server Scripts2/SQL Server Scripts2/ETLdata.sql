@@ -9,6 +9,8 @@ DECLARE @DayInProcess int = 1;
 
 SET LANGUAGE Polish
 
+IF(NOT EXISTS(SELECT 1 FROM Data))
+BEGIN
 WHILE @YearInProcess <= @UpperYearBound
 	BEGIN
 		PRINT @YearInProcess;
@@ -30,4 +32,4 @@ WHILE @YearInProcess <= @UpperYearBound
 		SET @MonthInProcess = 1;
 		SET @YearInProcess = @YearInProcess + 1;
 	END
-GO
+END

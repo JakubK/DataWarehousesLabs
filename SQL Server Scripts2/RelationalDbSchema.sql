@@ -1,14 +1,21 @@
 USE master;
+DECLARE @kill varchar(8000) = '';  
+SELECT @kill = @kill + 'kill ' + CONVERT(varchar(5), session_id) + ';'  
+FROM sys.dm_exec_sessions
+WHERE database_id  = db_id('RelationalDb')
+
+EXEC(@kill);
+
 DROP DATABASE IF EXISTS RelationalDb;
 
 CREATE DATABASE RelationalDb;
 USE RelationalDb;
 
 CREATE TABLE Dzial (
-	Id INT IDENTITY(1,1) PRIMARY KEY,
+	Id INT  PRIMARY KEY,
 	Nazwa VARCHAR(30) NOT NULL,
 	Kraj VARCHAR(30) NOT NULL,
-	Lokalizacja VARCHAR(60) NOT NULL,
+	Miasto VARCHAR(60) NOT NULL,
 	MaxLiczbaPracownikow INT NOT NULL
 );
 
@@ -21,21 +28,21 @@ CREATE TABLE Klient (
 
 
 CREATE TABLE Producent (
-	Id INT IDENTITY(1,1) PRIMARY KEY,
+	Id INT PRIMARY KEY,
 	Nazwa VARCHAR(60) NOT NULL,
 );
 
 
 CREATE TABLE Agent (
-	Id INT IDENTITY(1,1) PRIMARY KEY,
-	Nazwa VARCHAR(30) NOT NULL,
+	Id INT PRIMARY KEY,
+	Imie VARCHAR(30) NOT NULL,
 	Nazwisko VARCHAR(30) NOT NULL,
 	FK_Dzial INT NOT NULL,
 	FOREIGN KEY(FK_Dzial) REFERENCES Dzial(Id)
 );
 
 CREATE TABLE Produkt (
-	Id INT IDENTITY(1,1) PRIMARY KEY,
+	Id INT PRIMARY KEY,
 	Nazwa VARCHAR(30) NOT NULL,
 	Koszt DECIMAL(17,2) NOT NULL,
 	Marza DECIMAL(17,2) NOT NULL,
@@ -44,7 +51,7 @@ CREATE TABLE Produkt (
 );
 
 CREATE TABLE Polaczenie (
-	Id INT IDENTITY(1,1) PRIMARY KEY,
+	Id INT  PRIMARY KEY,
 	Data_Polaczenia DATETIME NOT NULL,
 	Rezultat BIT NOT NULL,
 	FK_Produkt INT NOT NULL,

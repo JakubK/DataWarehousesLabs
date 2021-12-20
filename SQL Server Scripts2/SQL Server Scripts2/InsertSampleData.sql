@@ -54,7 +54,7 @@ INSERT INTO Agent([Imie i Nazwisko], Id_Dzial) VALUES
 ('Mateusz Woüniak', 5);
 
 INSERT INTO Rezultat(Tresc) VALUES 
-('Sprzedano'),(Nie sprzedano');
+('Sprzedano'),('Nie sprzedano');
 
 INSERT INTO Polaczenie(Id_Agent, Id_Czas, Id_Data, Id_Klient, Id_Premia,
 						Id_Produkt, Id_Rezultat, Koszt, Marza, Zysk) VALUES

@@ -7,7 +7,7 @@ GO
 --PRINT @PathToFile;
 
 BULK INSERT dbo.statTemp
-	FROM 'C:\dev\HDLab\DataWarehousesLabs\DataGenerator\t0_excel.csv'
+	FROM 'C:\dev\HDLab\DataWarehousesLabs\DataGenerator\t1_excel.csv'
 	WITH
 	(
 		FIRSTROW = 2,

@@ -13,9 +13,9 @@ USE RelationalDb;
 
 CREATE TABLE Dzial (
 	Id INT  PRIMARY KEY,
-	Nazwa VARCHAR(30) NOT NULL,
-	Kraj VARCHAR(30) NOT NULL,
-	Miasto VARCHAR(60) NOT NULL,
+	Nazwa VARCHAR(100) NOT NULL,
+	Kraj VARCHAR(100) NOT NULL,
+	Miasto VARCHAR(100) NOT NULL,
 	MaxLiczbaPracownikow INT NOT NULL
 );
 
@@ -61,3 +61,4 @@ CREATE TABLE Polaczenie (
 	FOREIGN KEY(FK_Agent) REFERENCES Agent(Id),
 	FOREIGN KEY(FK_Klient) REFERENCES Klient(Numer)
 );
+

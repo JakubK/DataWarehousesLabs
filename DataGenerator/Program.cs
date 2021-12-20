@@ -91,7 +91,7 @@ namespace DataGenerator
             var testDepartments = new Faker<Department>()
                 .StrictMode(true)
                 .RuleFor(x => x.Id, f => departmentIds++)
-                .RuleFor(x => x.Name, f => f.Commerce.Department())
+                .RuleFor(x => x.Name, f => f.Commerce.Department() + departmentIds)
                 .RuleFor(x => x.Country, f => f.Address.Country())
                 .RuleFor(x => x.Location, f => f.Address.City()
                     .Replace(',',' ')
@@ -129,7 +129,7 @@ namespace DataGenerator
             var testProducts = new Faker<Product>()
                 .StrictMode(true)
                 .RuleFor(x => x.Id, f => productIds++)
-                .RuleFor(x => x.Name, f => f.Commerce.ProductName())
+                .RuleFor(x => x.Name, f => f.Commerce.Product() + productIds)
                 .RuleFor(x => x.Price, f => decimal.Parse(f.Commerce.Price()))
                 .RuleFor(x => x.Margin, f => Math.Round(((decimal)(random.NextDouble() % MaxMargin)), 2))
                 .RuleFor(x => x.ProducerId, f => random.Next() % ProducerCount);

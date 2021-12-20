@@ -66,8 +66,8 @@ GO
 
 
 
-SELECT COUNT(*) FROM vETLpolacznie
-SELECT COUNT(*) FROM RelationalDb.dbo.Polaczenie
+--SELECT COUNT(*) FROM vETLpolacznie
+--SELECT COUNT(*) FROM RelationalDb.dbo.Polaczenie
 
 
 MERGE INTO Polaczenie as t USING vETLpolacznie as s

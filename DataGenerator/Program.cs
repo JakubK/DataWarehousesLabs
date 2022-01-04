@@ -30,13 +30,12 @@ namespace DataGenerator
 
 
         // Data row count
-        public const int AgentCount = 40;
-        public const int ClientCount = 100;
-        public const int DepartmentCount = 5;
-        public const int PhoneCallCount = 150;
-        public const int ProducerCount = 10;
-        public const int ProductCount = 40;
-        public const int ExcelEntryCount = 10;
+        public const int AgentCount = 1000;
+        public const int ClientCount = 50000;
+        public const int DepartmentCount = 10;
+        public const int PhoneCallCount = 1000000;
+        public const int ProducerCount = 50;
+        public const int ProductCount = 2000;
         public const double callSuccessChance = 0.3;
 
 
